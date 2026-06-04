@@ -8,20 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('bids', function (Blueprint $table) {
+        Schema::create('logistics_jobs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained('logistics_jobs')->onDelete('cascade');
-            $table->foreignId('agent_id')->constrained('users')->onDelete('cascade');
-            $table->decimal('amount', 15, 2);
-            $table->text('message');
-            $table->string('estimated_completion_time');
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+            $table->foreignId('importer_id')->constrained('users')->onDelete('cascade');
+            $table->string('title');
+            $table->text('description');
+            $table->string('origin_port');
+            $table->string('destination');
+            $table->decimal('budget', 15, 2);
+            $table->date('expected_delivery_date');
+            $table->enum('status', ['open', 'awarded', 'in_progress', 'completed'])->default('open');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('bids');
+        Schema::dropIfExists('logistics_jobs');
     }
 };
